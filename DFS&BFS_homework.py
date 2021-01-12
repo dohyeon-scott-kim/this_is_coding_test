@@ -29,29 +29,31 @@ n, m = map(int, input().split())
 graph = []
 for i in range(n):
     graph.append(list(map(int, input())))
+visited = [[[0] * 2 for i in range(m)] for i in range(n)]
 
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-def bfs(x, y):
+def bfs():
     queue = deque()
-    break_wall = 1
-    queue.append((x, y, break_wall))
+    queue.append((0, 0, 1))
+    visited[0][0][1] = 1
     while queue:
         x, y, break_wall = queue.popleft()
+
+        if x == n - 1 and y == m - 1:
+            return visited[x][y][break_wall]
+
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
-            if nx <= -1 or nx >= n or ny <= -1 or ny >= m:
-                continue
-            if graph[nx][ny] == 1 and break_wall == 1:
-                break_wall -= 1
-                graph[nx][ny] = graph[x][y] + 1
-                queue.append((nx, ny, break_wall))
-            if graph[nx][ny] == 0:
-                graph[nx][ny] = graph[x][y] + 1
-                queue.append((nx, ny, break_wall))
-    return graph[n-1][m-1]
+            if 0 <= nx < n and 0 <= ny < m:
+                if graph[nx][ny] == 0 and visited[nx][ny][break_wall] == 0:
+                    visited[nx][ny][break_wall] = visited[x][y][break_wall] + 1
+                    queue.append((nx, ny, break_wall))
+                if graph[nx][ny] == 1 and break_wall == 1:
+                    visited[nx][ny][0] = visited[x][y][1] + 1
+                    queue.append((nx, ny, 0))
+    return -1
 
-graph[0][0] = 1
-print(bfs(0, 0))
+print(bfs())
