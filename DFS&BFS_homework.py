@@ -57,3 +57,104 @@ def bfs():
     return -1
 
 print(bfs())
+
+# 이분 그래프
+from collections import deque
+import sys
+input = sys.stdin.readline
+
+def bfs(n):
+    queue = deque()
+    queue.append(n)
+    color[n] = 1
+    while queue:
+        popout = queue.popleft()
+        for i in graph_info[popout]:
+            if color[i] == 0:
+                color[i] = 3 - color[popout]
+                queue.append(i)
+            elif color[i] == color[popout]:
+                return False
+    return True
+
+K = int(input())
+for i in range(K):
+    V, E = map(int, input().split())
+    graph_info = [[] for i in range(V + 1)]
+    color = [0 for i in range(V + 1)]
+    for j in range(E):
+        start, end = map(int, input().split())
+        graph_info[start].append(end)
+        graph_info[end].append(start)
+    ans = 'YES'
+    for k in range(1, V+1):
+        if color[k] == 0:
+            if bfs(k) == False:
+                ans = 'NO'
+                break
+    print(ans)
+
+# DFS와 BFS
+from collections import deque
+
+def bfs(V):
+    queue = deque()
+    queue.append(V)
+    visited_bfs[V] = 1
+    while queue:
+        pop_out = queue.popleft()
+        bfs_list.append(pop_out)
+        for i in graph_info[pop_out]:
+            if visited_bfs[i] == 0:
+                visited_bfs[i] = 1
+                queue.append(i)
+    return bfs_list
+
+def dfs(V):
+    visited_dfs[V] = 1
+    dfs_list.append(V)
+    for i in graph_info[V]:
+        if visited_dfs[i] == 0:
+            dfs(i)
+    return dfs_list
+
+N, M, V = map(int, input().split())
+
+graph_info = [[] for i in range(N + 1)]
+visited_dfs = [0 for i in range(N + 1)]
+visited_bfs = [0 for i in range(N + 1)]
+dfs_list = []
+bfs_list = []
+
+for i in range(M):
+    start, end = map(int, input().split())
+    graph_info[start].append(end)
+    graph_info[end].append(start)
+
+for i in range(N):
+    graph_info[i].sort()
+
+print(*dfs(V))
+print(*bfs(V))
+
+# 바이러스
+N = int(input())
+network_N = int(input())
+
+network_info = [[] for i in range(N + 1)]
+virus_comp = [0 for i in range(N + 1)]
+
+for i in range(network_N):
+    start, end = map(int, input().split())
+    network_info[start].append(end)
+    network_info[end].append(start)
+
+def dfs(V):
+    virus_comp[V] = 1
+    for i in network_info[V]:
+        if virus_comp[i] == 0:
+            dfs(i)
+
+dfs(1)
+
+print(sum(virus_comp)-1)
