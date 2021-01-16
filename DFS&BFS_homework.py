@@ -158,3 +158,44 @@ def dfs(V):
 dfs(1)
 
 print(sum(virus_comp)-1)
+
+# 단지번호 붙이기
+
+N = int(input())
+graph = []
+for i in range(N):
+    graph.append(list(map(int, input())))
+
+apt_cplx = [[0] * N for i in range(N)]
+count = 1
+def dfs(x, y):
+    global count
+    if x < 0 or x >= N or y < 0 or y >= N:
+        return False
+    if graph[x][y] == 1:
+        if apt_cplx[x][y] == 0:
+            apt_cplx[x][y] = count
+            dfs(x - 1, y)
+            dfs(x + 1, y)
+            dfs(x, y - 1)
+            dfs(x, y + 1)
+            return True
+    return False
+
+for i in range(N):
+    for j in range(N):
+        if dfs(i, j) == True:
+            count += 1
+
+print(count - 1)
+numb_apt = []
+for i in range(1, count):
+    n = 0
+    for j in range(N):
+        n += apt_cplx[j].count(i)
+    numb_apt.append(n)
+
+numb_apt.sort()
+
+for i in range(count-1):
+    print(numb_apt[i])
