@@ -138,26 +138,43 @@ print(*dfs(V))
 print(*bfs(V))
 
 # 바이러스
-N = int(input())
-network_N = int(input())
+
+# 문제 요약
+## 컴퓨터 바이러스인 웜바이러스: 네트워크를 통해 전파
+## 한 컴퓨터가 웜바이러스에 걸리면 그 컴퓨터와 네트워상에 연결된 모든 컴퓨터는 웜바이러스에 걸림
+## 1번 컴퓨터가 웜바이러스에 걸렸을 때 1번 컴퓨터를 통해 웜바이러스에 걸리는 컴퓨터의 수 출력
+
+N = int(input()) # 컴퓨터의 수 7
+network_N = int(input()) # 컴퓨터 쌍의 수 6
 
 network_info = [[] for i in range(N + 1)]
+# [[], [], [], [], [], [], [], [], []]
+# 1, 2, 3, ... 컴퓨터와 연결된 네트워크 정보를 저장할 list 생성
 virus_comp = [0 for i in range(N + 1)]
+# 바이러스가 걸렸는 지 정보를 저장할 list
 
 for i in range(network_N):
     start, end = map(int, input().split())
     network_info[start].append(end)
     network_info[end].append(start)
+# network의 정보를 다 저장
+# 1 2
+# start = 1 end = 2
+# network_info[1] = 2 저장
+# network_info[2] = 1 저장
+# ...
 
 def dfs(V):
-    virus_comp[V] = 1
-    for i in network_info[V]:
-        if virus_comp[i] == 0:
+    virus_comp[V] = 1 # virus가 걸렸다고 저장
+    for i in network_info[V]: # V와 연결된 컴퓨터 중
+        if virus_comp[i] == 0: # 바이러스에 걸리지 않은 컴퓨터만 다시 dfs 돌리기
             dfs(i)
 
-dfs(1)
+dfs(1) # 1번 컴퓨터가 바이러스에 걸렸을 때 바이러스에 걸리는 컴퓨터는 virus_comp에 저장
 
 print(sum(virus_comp)-1)
+# 문제 상에서 1번 컴퓨터를 통해 웜 바이러스에 걸리는 컴퓨터의 수 출력
+# 따라서, virus_comp를 다 합한 후 1번 컴퓨터 자신은 제외해야되기 때문에 -1
 
 # 단지번호 붙이기
 
