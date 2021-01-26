@@ -1,4 +1,6 @@
 # 피보나치 함수
+
+# N 번째 피보나치를 구하는 함수
 def fibonacci(n):
     if n == 0:
         print('0')
@@ -9,18 +11,23 @@ def fibonacci(n):
     else:
         return fibonacci(n - 1) + fibonacci(n - 2)
 
-d = [[0, 0] for i in range(41)]
-d[0] = [1, 0]
-d[1] = [0, 1]
+# fibonacci(N)을 호출했을 때 0과 1이 각각 몇번 출력되는 지 구하는 프로그램
+
+d = [[0, 0] for i in range(41)] # fibonacci(N) 호출 시 0, 1 각각 몇번 호출되는 지 입력받는 list
+d[0] = [1, 0] # fibonacci(0) 호출 시 0은 1번 호출, 1은 0번 호출
+d[1] = [0, 1] # fibonacci(1) 호출 시 0은 0번 호출, 1은 1번 호출
 
 def n_of_0_and_1(n):
     for i in range(2, n + 1):
         d[i] = [x + y for x, y in zip(d[i-1], d[i-2])]
-    return(d[n])
+        # d[i - 1] = [a, b]
+        # d[i - 2] = [c, d]
+        # d[i] = [a + c, b + d]
+    return d[n]
 
 
-t = int(input())
-for i in range(t):
+t = int(input()) # test 갯수
+for i in range(t): # 각 test 마다 fibonacci(N)을 호출했을 때 0과 1이 각각 몇번 출력되는 지 print
     n = int(input())
     print(*n_of_0_and_1(n))
 
